@@ -67,10 +67,11 @@ public class Series<T> extends ArrayList<T> {
    * Get highest value from the latest {@code window} elements and return the value
    * and its reversed index. The reversed index counts {@code 0} for the tail, and
    * increases from tail to head.
+   *
    * @param days window to scan from tail to head.
-   * @param c comparator
+   * @param c    comparator
    * @return {@link SeriesPoint} if the container is not empty, or {@code null}
-   *  otherwise.
+   * otherwise.
    */
   public SeriesPoint<T> getHigh(int days, Comparator<T> c) {
     return getEstValue(days, c, 1);
@@ -80,10 +81,11 @@ public class Series<T> extends ArrayList<T> {
    * Get lowest value from the latest {@code window} elements and return the value
    * and its reversed index.  The reversed index counts {@code 0} for the tail, and
    * increases from tail to head.
+   *
    * @param days window to scan from tail to head.
-   * @param c comparator
+   * @param c    comparator
    * @return {@link SeriesPoint} if the container is not empty, or {@code null}
-   *  otherwise.
+   * otherwise.
    */
   public SeriesPoint<T> getLow(int days, Comparator<T> c) {
     return getEstValue(days, c, -1);
@@ -91,6 +93,7 @@ public class Series<T> extends ArrayList<T> {
 
   /**
    * Get element from head to tail.
+   *
    * @param index index
    * @return element
    */
@@ -103,6 +106,7 @@ public class Series<T> extends ArrayList<T> {
 
   /**
    * Get the first element.
+   *
    * @return T first element.
    */
   public T getHead() {
@@ -111,6 +115,7 @@ public class Series<T> extends ArrayList<T> {
 
   /**
    * Get element indexed from tail to head.
+   *
    * @param reversedIndex reversed index from tail to head.
    * @return element
    */
@@ -123,6 +128,7 @@ public class Series<T> extends ArrayList<T> {
 
   /**
    * Get the last element.
+   *
    * @return T last element
    */
   public T getTail() {

@@ -31,12 +31,12 @@ package com.nabiki.ta;
 /**
  * Simple Moving Average is computed with the following equation:<br/>
  * <code>
- *   SMA of the n-th days, with a weight w to current input C and m inputs,
- *   is equal to:<br/>
- *   SMA(n) = (w x C + SMA(n-1) x (m - w)) / m<br/>
- *   or<br/>
- *   SMA(n) = alpha x C + SMA(n-1) x (1 - alpha)<br/>
- *   alpha = w / m
+ * SMA of the n-th days, with a weight w to current input C and m inputs,
+ * is equal to:<br/>
+ * SMA(n) = (w x C + SMA(n-1) x (m - w)) / m<br/>
+ * or<br/>
+ * SMA(n) = alpha x C + SMA(n-1) x (1 - alpha)<br/>
+ * alpha = w / m
  * </code>
  */
 public class Sma extends Ema {

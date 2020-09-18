@@ -49,6 +49,7 @@ public class SeriesPoint<T> {
    * Get reversed index of this element. For original index {@code size()-1), its
    * reversed index is {@code 0}. And then {@code 1} for {@code size()-2}, and so
    * forth.
+   *
    * @return reversed index
    */
   public int getReversedIndex() {

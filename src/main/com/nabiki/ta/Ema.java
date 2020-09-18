@@ -31,9 +31,9 @@ package com.nabiki.ta;
 /**
  * Exponential moving average indicator computed with the following equation:<br/>
  * <code>
- *   n-th day has Ema(n) while previous day has Ema(n-1). Given alpha ranging from
- *   (0, 1) and  the n-th day input d,<br/>
- *   Ema(n) = alpha x d + (1 - alpha) x Ema(n-1)
+ * n-th day has Ema(n) while previous day has Ema(n-1). Given alpha ranging from
+ * (0, 1) and  the n-th day input d,<br/>
+ * Ema(n) = alpha x d + (1 - alpha) x Ema(n-1)
  * </code>
  */
 public class Ema extends Series<Double> {

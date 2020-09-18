@@ -31,11 +31,11 @@ package com.nabiki.ta;
 /**
  * Weighted moving average indicator computed with the following equation:<br/>
  * <code>
- *   n-th day WMA(n) and n-th day input p(n). Given window w, the WMA(n) over the
- *   latest window elements:<br/>
- *   deno(n) = w x  p(n) + (w-1) x p(n-1) + ... + 2 x p(n-w+2) + p(n-w+1)<br/>
- *   nume(n) = w + (w-1) + ... + 2 + 1 = n x (n+1) / 2<br/>
- *   WMA(n) = deno(n) / nume(n)
+ * n-th day WMA(n) and n-th day input p(n). Given window w, the WMA(n) over the
+ * latest window elements:<br/>
+ * deno(n) = w x  p(n) + (w-1) x p(n-1) + ... + 2 x p(n-w+2) + p(n-w+1)<br/>
+ * nume(n) = w + (w-1) + ... + 2 + 1 = n x (n+1) / 2<br/>
+ * WMA(n) = deno(n) / nume(n)
  * </code>
  */
 public class Wma extends Ma {

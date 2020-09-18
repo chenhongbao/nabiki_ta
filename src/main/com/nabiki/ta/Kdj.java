@@ -34,13 +34,13 @@ import java.util.Comparator;
 /**
  * Stochastic oscillator, also named KDJ, is computed by the following equation:<br/>
  * <code>
- *  Given close, high and low prices of the latest n days, latest k days for K,
- *  latest d days for D, highest value of prices c of latest x day is hhv(c, x),
- *  lowest is llv(c, x), the indicator is computed:<br/>
- *  RSV(n) = (close - llv(low, n)) / (hhv(high, n) - llv(low, n)) * 100<br/>
- *  K(n) = SMA(RSV, k, 1)<br/>
- *  D(n) = SMA(K, d, 1)<br/>
- *  J(n) = 3 x K(n) - 2 x D(n)
+ * Given close, high and low prices of the latest n days, latest k days for K,
+ * latest d days for D, highest value of prices c of latest x day is hhv(c, x),
+ * lowest is llv(c, x), the indicator is computed:<br/>
+ * RSV(n) = (close - llv(low, n)) / (hhv(high, n) - llv(low, n)) * 100<br/>
+ * K(n) = SMA(RSV, k, 1)<br/>
+ * D(n) = SMA(K, d, 1)<br/>
+ * J(n) = 3 x K(n) - 2 x D(n)
  * </code>
  */
 public class Kdj extends Series<KdjElement> {
@@ -65,9 +65,9 @@ public class Kdj extends Series<KdjElement> {
   /**
    * KDJ with default parameters:<br/>
    * <code>
-   *   days = 9<br/>
-   *   k-days = 3<br/>
-   *   d-days = 3<br/>
+   * days = 9<br/>
+   * k-days = 3<br/>
+   * d-days = 3<br/>
    * </code>
    */
   public Kdj() {
@@ -82,11 +82,12 @@ public class Kdj extends Series<KdjElement> {
 
   /**
    * Add and compute KDJ indicator on the specified inputs.
+   *
    * @param close close price
-   * @param h high price
-   * @param l low price
-   * @return  {@code true} if new element is computed and added, {@code false}
-   *  otherwise.
+   * @param h     high price
+   * @param l     low price
+   * @return {@code true} if new element is computed and added, {@code false}
+   * otherwise.
    */
   public boolean add(Double close, Double h, Double l) {
     high.add(h);

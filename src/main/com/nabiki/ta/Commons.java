@@ -32,15 +32,15 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 
 public class Commons {
-    private Commons() {
-    }
+  private Commons() {
+  }
 
-    public static Double average(Collection<Double> c) {
-        if (c.isEmpty())
-            throw new NoSuchElementException("empty collection");
-        var t = 0.0D;
-        for (var v : c)
-            t += v;
-        return t / c.size();
-    }
+  public static Double average(Collection<Double> c) {
+    if (c.isEmpty())
+      throw new NoSuchElementException("empty collection");
+    var t = 0.0D;
+    for (var v : c)
+      t += v;
+    return t / c.size();
+  }
 }
