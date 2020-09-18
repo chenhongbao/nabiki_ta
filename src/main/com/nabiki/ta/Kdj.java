@@ -52,7 +52,7 @@ public class Kdj extends Series<KdjElement> {
     }
   };
 
-  private static final int DEFAULT_DAYS = 9;
+  private static final int DEFAULT_N_DAYS = 9;
   private static final int DEFAULT_K_DAYS = 3;
   private static final int DEFAULT_D_DAYS = 3;
 
@@ -60,7 +60,7 @@ public class Kdj extends Series<KdjElement> {
   private final Series<Double> low = new Series<>();
   private final Sma k;
   private final Sma d;
-  private final int days;
+  private final int nDays;
 
   /**
    * KDJ with default parameters:<br/>
@@ -71,11 +71,11 @@ public class Kdj extends Series<KdjElement> {
    * </code>
    */
   public Kdj() {
-    this(DEFAULT_DAYS, DEFAULT_K_DAYS, DEFAULT_D_DAYS);
+    this(DEFAULT_N_DAYS, DEFAULT_K_DAYS, DEFAULT_D_DAYS);
   }
 
   public Kdj(int nDays, int kDays, int dDays) {
-    this.days = nDays;
+    this.nDays = nDays;
     this.k = new Sma(kDays, 1);
     this.d = new Sma(dDays, 1);
   }
@@ -91,8 +91,8 @@ public class Kdj extends Series<KdjElement> {
   public boolean add(Double close, Double h, Double l) {
     high.add(h);
     low.add(l);
-    var vh = high.getHigh(days, comparator).getValue();
-    var vl = low.getLow(days, comparator).getValue();
+    var vh = high.getHigh(nDays, comparator).getValue();
+    var vl = low.getLow(nDays, comparator).getValue();
     var rsv = (close - vl) / (vh - vl) * 100.0D;
     k.add(rsv);
     d.add(k.getTail());
