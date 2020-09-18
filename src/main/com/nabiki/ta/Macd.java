@@ -43,7 +43,7 @@ import java.util.Collection;
  *   MACD(n) = (DIF(n) - DEA(n)) x 2<br/>
  * </code>
  */
-public class Macd extends AppendOnlyVector<MacdElement> {
+public class Macd extends Series<MacdElement> {
   private static final int DEFAULT_SHORT_TERM = 12;
   private static final int DEFAULT_LONG_TERM = 26;
   private static final int DEFAULT_MID_TERM = 9;
@@ -77,12 +77,12 @@ public class Macd extends AppendOnlyVector<MacdElement> {
   public boolean add(Double close) {
     difShort.add(close);
     difLong.add(close);
-    var dif = difShort.tail() - difLong.tail();
+    var dif = difShort.getTail() - difLong.getTail();
     dea.add(dif);
     return super.add(new MacdElement(
-            (dif - dea.tail()) * 2.0D,
+            (dif - dea.getTail()) * 2.0D,
             dif,
-            dea.tail()));
+            dea.getTail()));
   }
 
   /**

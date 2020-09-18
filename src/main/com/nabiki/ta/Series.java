@@ -33,13 +33,62 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public class AppendOnlyVector<T> extends ArrayList<T> {
-  /**
-   * Get the first element.
-   *
-   * @return T first element.
+public class Series<T> extends ArrayList<T> {
+  /*
+  To find a bigger value, set token positive, otherwise set it negative.
    */
-  public T head() {
+  private SeriesPoint<T> getEstValue(int window, Comparator<T> c, int token) {
+    int n = Math.min(window, size());
+    if (n < 1)
+      return null;
+    else if (n == 1)
+      return new SeriesPoint<>(get(0), 0);
+    int idx = size();
+    int revIdx = 0;
+    T v = get(--idx);
+    while (--n > 0) {
+      var v0 = get(--idx);
+      var r = c.compare(v, v0) * token;
+      if (r < 0) {
+        v = v0;
+        revIdx = size() - 1 - idx;
+      }
+    }
+    return new SeriesPoint<>(v, revIdx);
+  }
+
+  /**
+   * Get highest value from the latest {@code window} elements and return the value
+   * and its reversed index. The reversed index counts {@code 0} for the tail, and
+   * increases from tail to head.
+   * @param window window to scan from tail to head.
+   * @param c comparator
+   * @return {@link SeriesPoint} if the container is not empty, or {@code null}
+   *  otherwise.
+   */
+  public SeriesPoint<T> getHigh(int window, Comparator<T> c) {
+    return getEstValue(window, c, 1);
+  }
+
+  /**
+   * Get lowest value from the latest {@code window} elements and return the value
+   * and its reversed index.  The reversed index counts {@code 0} for the tail, and
+   * increases from tail to head.
+   * @param window window to scan from tail to head.
+   * @param c comparator
+   * @return {@link SeriesPoint} if the container is not empty, or {@code null}
+   *  otherwise.
+   */
+  public SeriesPoint<T> getLow(int window, Comparator<T> c) {
+    return getEstValue(window, c, -1);
+  }
+
+  /**
+   * Get element from head to tail.
+   * @param index index
+   * @return element
+   */
+  public T getHead(int index) {
     if (size() == 0)
       return null;
     else
@@ -47,15 +96,31 @@ public class AppendOnlyVector<T> extends ArrayList<T> {
   }
 
   /**
-   * Get the last element.
-   *
-   * @return T last element
+   * Get the first element.
+   * @return T first element.
    */
-  public T tail() {
-    if (size() == 0)
+  public T getHead() {
+    return getHead(0);
+  }
+
+  /**
+   * Get element indexed from tail to head.
+   * @param reversedIndex reversed index from tail to head.
+   * @return element
+   */
+  public T getTail(int reversedIndex) {
+    if (isEmpty())
       return null;
     else
-      return get(size() - 1);
+      return get(size() - 1 - reversedIndex);
+  }
+
+  /**
+   * Get the last element.
+   * @return T last element
+   */
+  public T getTail() {
+    return getTail(0);
   }
 
   /**

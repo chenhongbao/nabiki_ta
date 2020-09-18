@@ -28,44 +28,30 @@
 
 package com.nabiki.ta;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-
 /**
- * Moving average that simply computes the average value of the latest elements back
- * to the size of {@code window}.
+ * An element in the underlying {@link Series} container. The index is reversely
+ * computed, meaning for the tail element it counts {@code 0}.
  */
-public class Ma extends Series<Double> {
-  private final int window;
-  protected final transient ArrayList<Double> base = new ArrayList<>();
+public class SeriesPoint<T> {
+  private final T value;
+  private final int reversedIndex;
 
-  public Ma(int window) {
-    if (window <= 0)
-      throw new InvalidValueException("not positive");
-    this.window = window;
+  public SeriesPoint(T value, int reversedIndex) {
+    this.value = value;
+    this.reversedIndex = reversedIndex;
   }
 
-  public int getWindow() {
-    return window;
+  public T getValue() {
+    return value;
   }
 
-  @Override
-  public boolean add(Double d) {
-    base.add(d);
-    var w = Math.min(getWindow(), base.size());
-    var range = super.subList(base.size() - w, base.size());
-    return super.add(Commons.average(range));
+  /**
+   * Get reversed index of this element. For original index {@code size()-1), its
+   * reversed index is {@code 0}. And then {@code 1} for {@code size()-2}, and so
+   * forth.
+   * @return reversed index
+   */
+  public int getReversedIndex() {
+    return reversedIndex;
   }
-
-
-  @Override
-  public boolean addAll(Collection<? extends Double> c) {
-    if (c.size() == 0)
-      return false;
-    for (var v : c)
-      add(v);
-    return true;
-  }
-
 }
