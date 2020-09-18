@@ -46,7 +46,7 @@ public class Wma extends Ma {
   @Override
   public boolean add(Double d) {
     base.add(d);
-    var n = Math.min(base.size(), getWindow());
+    var n = Math.min(base.size(), getDays());
     var idx = base.size();
     var t = 0.0D;
     do {

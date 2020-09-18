@@ -31,56 +31,62 @@ package com.nabiki.ta;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class Series<T> extends ArrayList<T> {
+  private SeriesPoint<T> getEastValue(List<T> a, Comparator<T> c, int token) {
+    int idx = a.size();
+    int revIdx = 0;
+    T v = a.get(--idx);
+    while (idx > 0) {
+      var v0 = a.get(--idx);
+      var r = c.compare(v, v0) * token;
+      if (r < 0) {
+        v = v0;
+        revIdx = a.size() - 1 - idx;
+      }
+    }
+    return new SeriesPoint<>(v, revIdx);
+  }
+
   /*
   To find a bigger value, set token positive, otherwise set it negative.
    */
-  private SeriesPoint<T> getEstValue(int window, Comparator<T> c, int token) {
-    int n = Math.min(window, size());
+  private SeriesPoint<T> getEstValue(int days, Comparator<T> c, int token) {
+    int n = Math.min(days, size());
     if (n < 1)
       return null;
     else if (n == 1)
       return new SeriesPoint<>(get(0), 0);
-    int idx = size();
-    int revIdx = 0;
-    T v = get(--idx);
-    while (--n > 0) {
-      var v0 = get(--idx);
-      var r = c.compare(v, v0) * token;
-      if (r < 0) {
-        v = v0;
-        revIdx = size() - 1 - idx;
-      }
-    }
-    return new SeriesPoint<>(v, revIdx);
+    else
+      return getEastValue(subList(size() - n, size()), c, token);
   }
 
   /**
    * Get highest value from the latest {@code window} elements and return the value
    * and its reversed index. The reversed index counts {@code 0} for the tail, and
    * increases from tail to head.
-   * @param window window to scan from tail to head.
+   * @param days window to scan from tail to head.
    * @param c comparator
    * @return {@link SeriesPoint} if the container is not empty, or {@code null}
    *  otherwise.
    */
-  public SeriesPoint<T> getHigh(int window, Comparator<T> c) {
-    return getEstValue(window, c, 1);
+  public SeriesPoint<T> getHigh(int days, Comparator<T> c) {
+    return getEstValue(days, c, 1);
   }
 
   /**
    * Get lowest value from the latest {@code window} elements and return the value
    * and its reversed index.  The reversed index counts {@code 0} for the tail, and
    * increases from tail to head.
-   * @param window window to scan from tail to head.
+   * @param days window to scan from tail to head.
    * @param c comparator
    * @return {@link SeriesPoint} if the container is not empty, or {@code null}
    *  otherwise.
    */
-  public SeriesPoint<T> getLow(int window, Comparator<T> c) {
-    return getEstValue(window, c, -1);
+  public SeriesPoint<T> getLow(int days, Comparator<T> c) {
+    return getEstValue(days, c, -1);
   }
 
   /**

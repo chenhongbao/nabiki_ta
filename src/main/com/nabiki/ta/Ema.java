@@ -36,22 +36,11 @@ package com.nabiki.ta;
  *   Ema(n) = alpha x d + (1 - alpha) x Ema(n-1)
  * </code>
  */
-public class Ema extends Ma {
+public class Ema extends Series<Double> {
   private static final double ZERO_DAY_EMA = 0.0D;
   private final double alpha;
 
-  /**
-   * Ema indicator with default {@code alpha = 2 / (window + 1)}.
-   *
-   * @param window window size, must be positive.
-   */
-  public Ema(int window) {
-    super(window);
-    alpha = defaultAlpha();
-  }
-
-  public Ema(double alpha, int window) {
-    super(window);
+  public Ema(double alpha) {
     if (alpha <= 0 || alpha >= 1)
       throw new InvalidValueException(String.format("%f not in (0, 1)", alpha));
     this.alpha = alpha;
@@ -64,9 +53,5 @@ public class Ema extends Ma {
       prev = get(size() - 1);
     var t = alpha * d + (1 - alpha) * prev;
     return super.add(t);
-  }
-
-  private double defaultAlpha() {
-    return 2.0 / (getWindow() + 1);
   }
 }

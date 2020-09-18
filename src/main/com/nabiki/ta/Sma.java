@@ -28,44 +28,21 @@
 
 package com.nabiki.ta;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-
 /**
- * Moving average that simply computes the average value of the latest elements back
- * to the size of {@code window}.
+ * Simple Moving Average is computed with the following equation:<br/>
+ * <code>
+ *   SMA of the n-th days, with a weight w to current input C and m inputs,
+ *   is equal to:<br/>
+ *   SMA(n) = (w x C + SMA(n-1) x (m - w)) / m<br/>
+ *   or<br/>
+ *   SMA(n) = alpha x C + SMA(n-1) x (1 - alpha)<br/>
+ *   alpha = w / m
+ * </code>
  */
-public class Ma extends Series<Double> {
-  private final int days;
-  protected final transient ArrayList<Double> base = new ArrayList<>();
-
-  public Ma(int days) {
-    if (days <= 0)
-      throw new InvalidValueException("not positive");
-    this.days = days;
+public class Sma extends Ema {
+  public Sma(int days, int weight) {
+    super(1.0D * weight / days);
+    if (weight <= 0 || days <= weight)
+      throw new InvalidValueException(String.format("(%d, %d)", days, weight));
   }
-
-  public int getDays() {
-    return days;
-  }
-
-  @Override
-  public boolean add(Double d) {
-    base.add(d);
-    var w = Math.min(getDays(), base.size());
-    var range = super.subList(base.size() - w, base.size());
-    return super.add(Commons.average(range));
-  }
-
-
-  @Override
-  public boolean addAll(Collection<? extends Double> c) {
-    if (c.size() == 0)
-      return false;
-    for (var v : c)
-      add(v);
-    return true;
-  }
-
 }

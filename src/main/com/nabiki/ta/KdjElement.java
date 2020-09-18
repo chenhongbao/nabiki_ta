@@ -28,44 +28,26 @@
 
 package com.nabiki.ta;
 
-import java.util.ArrayList;
-import java.util.Collection;
+public class KdjElement {
+  private final Double k;
+  private final Double d;
+  private final Double j;
 
-
-/**
- * Moving average that simply computes the average value of the latest elements back
- * to the size of {@code window}.
- */
-public class Ma extends Series<Double> {
-  private final int days;
-  protected final transient ArrayList<Double> base = new ArrayList<>();
-
-  public Ma(int days) {
-    if (days <= 0)
-      throw new InvalidValueException("not positive");
-    this.days = days;
+  public KdjElement(Double k, Double d, Double j) {
+    this.k = k;
+    this.d = d;
+    this.j = j;
   }
 
-  public int getDays() {
-    return days;
+  public Double getK() {
+    return k;
   }
 
-  @Override
-  public boolean add(Double d) {
-    base.add(d);
-    var w = Math.min(getDays(), base.size());
-    var range = super.subList(base.size() - w, base.size());
-    return super.add(Commons.average(range));
+  public Double getD() {
+    return d;
   }
 
-
-  @Override
-  public boolean addAll(Collection<? extends Double> c) {
-    if (c.size() == 0)
-      return false;
-    for (var v : c)
-      add(v);
-    return true;
+  public Double getJ() {
+    return j;
   }
-
 }
