@@ -28,45 +28,28 @@
 
 package com.nabiki.ta;
 
-/**
- * Exponential moving average indicator computed with the following equation:<br/>
- * <code>
- *   n-th day has EMA(n) while previous day has EMA(n-1). Given alpha ranging from
- *   (0, 1) and  the n-th day input d,<br/>
- *   EMA(n) = alpha x d + (1 - alpha) x EMA(n-1)
- * </code>
- */
-public class EMA extends MA {
-  private static final double ZERO_DAY_EMA = 0.0D;
-  private final double alpha;
+public class MacdElement {
+  private final Double macd;
+  private final Double dif;
+  private final Double dea;
 
-  /**
-   * EMA indicator with default {@code alpha = 2 / (window + 1)}.
-   *
-   * @param window window size, must be positive.
-   */
-  public EMA(int window) {
-    super(window);
-    alpha = defaultAlpha();
+  public MacdElement(Double macd, Double dif, Double dea) {
+    this.macd = macd;
+    this.dif = dif;
+    this.dea = dea;
   }
 
-  public EMA(double alpha, int window) {
-    super(window);
-    if (alpha <= 0 || alpha >= 1)
-      throw new ValueOutOfBoundException(String.format("%f not in (0, 1)", alpha));
-    this.alpha = alpha;
+  public Double getMacd() {
+    return macd;
   }
 
-  @Override
-  public boolean add(Double d) {
-    var prev = ZERO_DAY_EMA;
-    if (size() > 0)
-      prev = get(size() - 1);
-    var t = alpha * d + (1 - alpha) * prev;
-    return super.add(t);
+
+  public Double getDif() {
+    return dif;
   }
 
-  private double defaultAlpha() {
-    return 2.0 / (getWindow() + 1);
+
+  public Double getDea() {
+    return dea;
   }
 }

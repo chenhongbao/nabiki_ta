@@ -29,30 +29,44 @@
 package com.nabiki.ta;
 
 /**
- * Weighted moving average indicator computed with the following equation:<br/>
+ * Exponential moving average indicator computed with the following equation:<br/>
  * <code>
- *   n-th day WMA(n) and n-th day input p(n). Given window w, the WMA(n) over the
- *   latest window elements:<br/>
- *   deno(n) = w x  p(n) + (w-1) x p(n-1) + ... + 2 x p(n-w+2) + p(n-w+1)<br/>
- *   nume(n) = w + (w-1) + ... + 2 + 1 = n x (n+1) / 2<br/>
- *   WMA(n) = deno(n) / nume(n)
+ *   n-th day has Ema(n) while previous day has Ema(n-1). Given alpha ranging from
+ *   (0, 1) and  the n-th day input d,<br/>
+ *   Ema(n) = alpha x d + (1 - alpha) x Ema(n-1)
  * </code>
  */
-public class WMA extends MA {
-  public WMA(int window) {
+public class Ema extends Ma {
+  private static final double ZERO_DAY_EMA = 0.0D;
+  private final double alpha;
+
+  /**
+   * Ema indicator with default {@code alpha = 2 / (window + 1)}.
+   *
+   * @param window window size, must be positive.
+   */
+  public Ema(int window) {
     super(window);
+    alpha = defaultAlpha();
+  }
+
+  public Ema(double alpha, int window) {
+    super(window);
+    if (alpha <= 0 || alpha >= 1)
+      throw new InvalidValueException(String.format("%f not in (0, 1)", alpha));
+    this.alpha = alpha;
   }
 
   @Override
   public boolean add(Double d) {
-    base.add(d);
-    var n = Math.min(base.size(), getWindow());
-    var idx = base.size();
-    var t = 0.0D;
-    do {
-      t += n * base.get(--idx);
-    } while (--n > 0);
-    t /= n * (n + 1) / 2.0D;
+    var prev = ZERO_DAY_EMA;
+    if (size() > 0)
+      prev = get(size() - 1);
+    var t = alpha * d + (1 - alpha) * prev;
     return super.add(t);
+  }
+
+  private double defaultAlpha() {
+    return 2.0 / (getWindow() + 1);
   }
 }

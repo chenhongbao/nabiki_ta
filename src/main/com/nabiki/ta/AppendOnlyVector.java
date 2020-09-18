@@ -33,30 +33,29 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-/**
- * Moving average that simply computes the average value of the latest elements back
- * to the size of {@code window}.
- */
-public class MA extends ArrayList<Double> {
-  private final int window;
-  protected final transient ArrayList<Double> base = new ArrayList<>();
-
-  public MA(int window) {
-    if (window <= 0)
-      throw new ValueOutOfBoundException("not positive");
-    this.window = window;
+public class AppendOnlyVector<T> extends ArrayList<T> {
+  /**
+   * Get the first element.
+   *
+   * @return T first element.
+   */
+  public T head() {
+    if (size() == 0)
+      return null;
+    else
+      return get(0);
   }
 
-  public int getWindow() {
-    return window;
-  }
-
-  @Override
-  public boolean add(Double d) {
-    base.add(d);
-    var w = Math.min(getWindow(), base.size());
-    var range = super.subList(base.size() - w, base.size());
-    return super.add(Commons.average(range));
+  /**
+   * Get the last element.
+   *
+   * @return T last element
+   */
+  public T tail() {
+    if (size() == 0)
+      return null;
+    else
+      return get(size() - 1);
   }
 
   /**
@@ -65,7 +64,7 @@ public class MA extends ArrayList<Double> {
    */
   @Deprecated(since = "0.1")
   @Override
-  public void add(int index, Double element) {
+  public void add(int index, T element) {
     throw new UnsupportedOperationException();
   }
 
@@ -75,7 +74,7 @@ public class MA extends ArrayList<Double> {
    */
   @Deprecated(since = "0.1")
   @Override
-  public Double remove(int index) {
+  public T remove(int index) {
     throw new UnsupportedOperationException();
   }
 
@@ -89,14 +88,6 @@ public class MA extends ArrayList<Double> {
     throw new UnsupportedOperationException();
   }
 
-  @Override
-  public boolean addAll(Collection<? extends Double> c) {
-    if (c.size() == 0)
-      return false;
-    for (var v : c)
-      add(v);
-    return true;
-  }
 
   /**
    * @deprecated Moving average is strongly coherent with order of elements, no element should be
@@ -104,7 +95,7 @@ public class MA extends ArrayList<Double> {
    */
   @Deprecated(since = "0.1")
   @Override
-  public boolean addAll(int index, Collection<? extends Double> c) {
+  public boolean addAll(int index, Collection<? extends T> c) {
     throw new UnsupportedOperationException();
   }
 
@@ -144,7 +135,7 @@ public class MA extends ArrayList<Double> {
    */
   @Deprecated(since = "0.1")
   @Override
-  public boolean removeIf(Predicate<? super Double> filter) {
+  public boolean removeIf(Predicate<? super T> filter) {
     throw new UnsupportedOperationException();
   }
 
@@ -154,7 +145,7 @@ public class MA extends ArrayList<Double> {
    */
   @Deprecated(since = "0.1")
   @Override
-  public void sort(Comparator<? super Double> c) {
+  public void sort(Comparator<? super T> c) {
     throw new UnsupportedOperationException();
   }
 }

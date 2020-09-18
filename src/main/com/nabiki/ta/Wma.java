@@ -28,23 +28,31 @@
 
 package com.nabiki.ta;
 
-public class ValueOutOfBoundException extends RuntimeException {
-  public ValueOutOfBoundException() {
+/**
+ * Weighted moving average indicator computed with the following equation:<br/>
+ * <code>
+ *   n-th day WMA(n) and n-th day input p(n). Given window w, the WMA(n) over the
+ *   latest window elements:<br/>
+ *   deno(n) = w x  p(n) + (w-1) x p(n-1) + ... + 2 x p(n-w+2) + p(n-w+1)<br/>
+ *   nume(n) = w + (w-1) + ... + 2 + 1 = n x (n+1) / 2<br/>
+ *   WMA(n) = deno(n) / nume(n)
+ * </code>
+ */
+public class Wma extends Ma {
+  public Wma(int window) {
+    super(window);
   }
 
-  public ValueOutOfBoundException(String message) {
-    super(message);
-  }
-
-  public ValueOutOfBoundException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public ValueOutOfBoundException(Throwable cause) {
-    super(cause);
-  }
-
-  public ValueOutOfBoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-    super(message, cause, enableSuppression, writableStackTrace);
+  @Override
+  public boolean add(Double d) {
+    base.add(d);
+    var n = Math.min(base.size(), getWindow());
+    var idx = base.size();
+    var t = 0.0D;
+    do {
+      t += n * base.get(--idx);
+    } while (--n > 0);
+    t /= n * (n + 1) / 2.0D;
+    return super.add(t);
   }
 }
